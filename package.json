@@ -7,7 +7,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start -p $PORT",
-    "lint": "tslint -c tslint.json -p tsconfig.json"
+    "lint": "tslint --fix -c tslint.json -p tsconfig.json"
   },
   "keywords": [],
   "author": "",

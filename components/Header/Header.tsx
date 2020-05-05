@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link'
+import Link from 'next/link';
 import styled from 'styled-components';
 
 const StyledHeader = styled.header`
@@ -11,7 +11,7 @@ const StyledHeader = styled.header`
     align-items:center;
     justify-content:center;
     user-select: none;
-`
+`;
 const StyledLogo = styled.a`
     font-size: 47px;
     font-weight: bold;
@@ -22,13 +22,15 @@ const StyledLogo = styled.a`
     &:hover{
         cursor:pointer;
     }
-`
+`;
 const Header: React.FunctionComponent = () => {
-    return <StyledHeader>
-        <Link href='/'>
-            <StyledLogo>the POST</StyledLogo>
-        </Link>
-    </StyledHeader>
-}
+    return (
+        <StyledHeader>
+            <Link href='/'>
+                <StyledLogo>the POST</StyledLogo>
+            </Link>
+        </StyledHeader>
+    );
+};
 
 export default Header;

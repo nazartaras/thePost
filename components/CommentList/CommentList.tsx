@@ -2,14 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { TComment } from '../../types/TComment';
 
-
 interface ICommentListProps {
-    comments: Array<TComment>
+    comments: TComment[];
 }
 
 const StyledCommentList = styled.ul`
     list-style-type: none;
-`
+`;
 
 const CommentItem = styled.li`
     position: relative;
@@ -35,14 +34,20 @@ const CommentItem = styled.li`
         margin-top: 0px;
         margin-left: -20px;
     }
-`
+`;
 
-const CommentList : React.FunctionComponent<ICommentListProps> = ({comments}) => {
-    return <StyledCommentList>
-        {
-            comments.map(el=><CommentItem key = {el.id as React.ReactText}>{el.body}</CommentItem>)
-        }
-    </StyledCommentList>
-}
+const CommentList: React.FunctionComponent<ICommentListProps> = ({ comments }) => {
+    const generateComments = comments.map((el) => (
+        <CommentItem key={el.id as React.ReactText}>
+            {el.body}
+        </CommentItem>
+    ),
+    );
+    return (
+        <StyledCommentList>
+            {generateComments}
+        </StyledCommentList>
+    );
+};
 
 export default CommentList;

@@ -8,12 +8,14 @@ const StyledSpinnerContainer = styled.div`
     justify-content: center;
     z-index:4;
     margin: auto;
-`
+`;
 
-const Spinner:React.FunctionComponent = () => {
-    return <StyledSpinnerContainer>
-        <img src="/spinner.gif" alt="..."/>
-    </StyledSpinnerContainer>
-}
+const Spinner: React.FunctionComponent = () => {
+    return (
+        <StyledSpinnerContainer>
+            <img src="/spinner.gif" alt="..." />
+        </StyledSpinnerContainer>
+    );
+};
 
 export default Spinner;

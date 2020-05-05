@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { NextPage } from 'next';
 import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { createPost } from '../../components/PostList/redux/actions'
+import { createPost } from '../../components/PostList/redux/actions';
 import Header from '../../components/Header/Header';
 
 interface IPostConstructorProps {
-    createPost: (title: String, body: String) => { type: String, payload: { title: String, body: String } }
+    createPost: (title: string, body: string) => { type: string, payload: { title: string, body: string } };
 }
 
 const StyledPostContructor = styled.div`
@@ -15,12 +15,12 @@ const StyledPostContructor = styled.div`
     @media(max-width:900px){
         margin 0 5px;
     }
-`
+`;
 
 const StyledForm = styled.form`
     display: flex;
     flex-direction: column;
-`
+`;
 
 const TitleInput = styled.input`
     border: none;
@@ -35,7 +35,7 @@ const TitleInput = styled.input`
     &:focus{
         border-bottom: 4px solid #A3D5FF;
     }
-`
+`;
 
 const BodyTextarea = styled.textarea`
     border: 2px solid #D9F0FF;
@@ -49,13 +49,13 @@ const BodyTextarea = styled.textarea`
     &:focus{
         border: 4px solid #A3D5FF;
     }
-`
+`;
 
 const CreateButton = styled.button`
     padding: 10px;
     width: 100px;
     border-radius: 10px;
-    background-color: #9785f2; 
+    background-color: #9785f2;
     color: white;
     font-size: 18px;
     align-self: center;
@@ -67,13 +67,13 @@ const CreateButton = styled.button`
         cursor: pointer;
         background-color: #7467b5;
     }
-`
+`;
 
 const ErrorMessage = styled.p`
     text-align: center;
     font-size: 24px;
     color: red;
-`
+`;
 
 export const isClientOrServer = () => {
     return (typeof window !== 'undefined' && window.document) ? 'client' : 'server';
@@ -87,48 +87,50 @@ const PostConstructor: NextPage<IPostConstructorProps> = ({ createPost }) => {
     const handleTitleChange = ({ target }) => {
         setError('');
         changePostTitle(target.value);
-    }
+    };
 
     const handleBodyChange = ({ target }) => {
         setError('');
         changePostBody(target.value);
-    }
+    };
     const validateForm = (title, body) => {
         if (title.trim() === '' || body.trim() === '') {
-            setError('All fields should be filled!!!')
+            setError('All fields should be filled!!!');
             return false;
         }
-        return true
-    }
+        return true;
+    };
 
     const handleSubmit = (e) => {
         if (validateForm(postTitle, postBody)) {
-            createPost(postTitle.trim(), postBody.trim())
+            createPost(postTitle.trim(), postBody.trim());
         }
-    }
-    console.log(isClientOrServer())
-    return <>
-        <Header />
-        <StyledPostContructor>
-            <StyledForm onSubmit={(e) => e.preventDefault()}>
-                {error ? <ErrorMessage>🛑{error}🛑</ErrorMessage> : null}
-                <TitleInput placeholder='Enter title' value={postTitle} onChange={handleTitleChange} type='text' />
-                <BodyTextarea placeholder='Enter body' value={postBody} onChange={handleBodyChange} />
-                <CreateButton type='submit' onClick={handleSubmit}>Create</CreateButton>
-            </StyledForm>
-        </StyledPostContructor>
-    </>
-}
+    };
+    console.log(isClientOrServer());
+    return (
+        <>
+            <Header />
+            <StyledPostContructor>
+                <StyledForm onSubmit={(e) => e.preventDefault()}>
+                    {error ? <ErrorMessage>🛑{error}🛑</ErrorMessage> : null}
+                    <TitleInput placeholder='Enter title' value={postTitle} onChange={handleTitleChange} type='text' />
+                    <BodyTextarea placeholder='Enter body' value={postBody} onChange={handleBodyChange} />
+                    <CreateButton type='submit' onClick={handleSubmit}>Create</CreateButton>
+                </StyledForm>
+            </StyledPostContructor>
+        </>
+    );
+};
 
 const mapStateToProps = (rootState, props) => ({
     ...props,
-    selectedPost: rootState.postList.selectedPost
+    selectedPost: rootState.postList.selectedPost,
 });
 
 const actions = {
-    createPost
+    createPost,
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostConstructor);

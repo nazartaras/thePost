@@ -1,5 +1,5 @@
 export type TComment = {
-    body:String,
-    id: Number,
-    postId: Number
-}
+    body: string,
+    id: number,
+    postId: number,
+};

@@ -16,7 +16,7 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <html>
+      <html lang="en">
         <Head>
           <title>thePost</title>
           <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />

@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
-import postReducer, { postInitialState, IPostInitialState } from '../components/PostList/redux/reducer'
+import postReducer, { postInitialState, IPostInitialState } from '../components/PostList/redux/reducer';
 
 export const rootInitialState: {
-    postList: IPostInitialState
+    postList: IPostInitialState,
 } = {
-    postList:postInitialState
+    postList: postInitialState,
 };
 
 const rootReducer = combineReducers({
-    postList: postReducer
+    postList: postReducer,
 });
 
 export default rootReducer;
