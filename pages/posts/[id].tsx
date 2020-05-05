@@ -5,7 +5,11 @@ import { TPost } from '../../types/TPost';
 import { FETCH_POST_BY_ID } from '../../components/PostList/redux/actionTypes';
 import Spinner from '../../components/Spinner/Spinner';
 import CommentList from '../../components/CommentList/CommentList';
+import Header from '../../components/Header/Header';
 
+export const isClientOrServer = () => {
+    return (typeof window !== 'undefined' && window.document) ? 'client' : 'server';
+};
 interface IPostPageProps {
     selectedPost?: TPost;
     isServer: boolean;
@@ -17,6 +21,9 @@ const PostTitle = styled.h1`
 
 const StyledPostPage = styled.div`
     margin: 0 25%;
+    @media(max-width:900px){
+        margin 0 5px;
+    }
 `
 
 const PostBody = styled.p`
@@ -32,13 +39,17 @@ const CommentTitle = styled.h2`
 `
 
 const PostPage: NextPage<IPostPageProps> = ({ selectedPost, isServer }) => {
-    const currId = location.pathname.split('/')[2];
-    return selectedPost && selectedPost.id.toString() === currId ? <StyledPostPage>
-        <PostTitle>{selectedPost.title}</PostTitle>
-        <PostBody>{selectedPost.body}</PostBody>
-        <CommentTitle>Comments</CommentTitle>
-        <CommentList comments={selectedPost.comments} />
-    </StyledPostPage> : <Spinner />
+    console.log('id')
+    console.log(isClientOrServer())
+    return selectedPost ? <>
+        <Header />
+        <StyledPostPage>
+            <PostTitle>{selectedPost.title}</PostTitle>
+            <PostBody>{selectedPost.body}</PostBody>
+            <CommentTitle>Comments</CommentTitle>
+            <CommentList comments={selectedPost.comments} />
+        </StyledPostPage>
+    </> : <Spinner />
 }
 
 PostPage.getInitialProps = async (ctx) => {

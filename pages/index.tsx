@@ -6,10 +6,16 @@ import styled from 'styled-components';
 import { TPost } from '../types/TPost';
 import { FETCH_POSTS } from '../components/PostList/redux/actionTypes';
 import Spinner from '../components/Spinner/Spinner';
+import Header from '../components/Header/Header';
 
 interface IMainProps {
-    posts?: Array<TPost>
+    posts?: Array<TPost>,
+    isServer: boolean
 }
+
+export const isClientOrServer = () => {
+    return (typeof window !== 'undefined' && window.document) ? 'client' : 'server';
+};
 
 const StyledPostList = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
@@ -94,34 +100,35 @@ const CreatePost = styled.a`
     }
 `
 const PostList: NextPage<IMainProps> = ({ posts }) => {
-    return posts ? <StyledPostList>
-        <Link href="/posts/new">
-            <CreatePost>Create new post</CreatePost>
-        </Link>
-        {
-            posts.map(el =>
-                <Link key={el.id as React.ReactText} href="/posts/[id]" as={`/posts/${el.id}`}>
-                    <StyledPostItem>
-                        <PostItemHeader>
-                            <UserAvatar src='/user.png'></UserAvatar>
-                            <UserName>Bill Morigan</UserName>
-                        </PostItemHeader>
-                        <PostItemTitle>{el.title}</PostItemTitle>
-                        <PostItemBody>{el.body}</PostItemBody>
-                    </StyledPostItem>
-                </Link>
-            )
-        }
-    </StyledPostList> : <Spinner />
-}
-interface IMyContext extends NextPageContext {
-    fetchPosts: () => any;
-    posts: any;
+    console.log(isClientOrServer())
+    return posts ? <>
+        <Header />
+        <StyledPostList>
+            <Link href="/posts/new">
+                <CreatePost>Create new post</CreatePost>
+            </Link>
+            {
+                posts.map(el =>
+                    <Link key={el.id as React.ReactText} href="/posts/[id]" as={`/posts/${el.id}`}>
+                        <StyledPostItem>
+                            <PostItemHeader>
+                                <UserAvatar src='/user.png'></UserAvatar>
+                                <UserName>Bill Morigan</UserName>
+                            </PostItemHeader>
+                            <PostItemTitle>{el.title}</PostItemTitle>
+                            <PostItemBody>{el.body}</PostItemBody>
+                        </StyledPostItem>
+                    </Link>
+                )
+            }
+        </StyledPostList>
+    </> : <Spinner />
 }
 
-PostList.getInitialProps = async ({ store, posts, isServer, fetchPosts }: IMyContext) => {
+PostList.getInitialProps = async ({ store, req }) => {
+    const isServer = !!req
     await store.dispatch({ type: FETCH_POSTS })
-    return {};
+    return { isServer };
 };
 
 const mapStateToProps = (rootState, props) => ({
