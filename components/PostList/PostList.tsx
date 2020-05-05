@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from 'next/link'
-import { IPost } from './IPost';
+import { TPost } from '../../types/TPost';
 
 
 interface IPostListProps {
-    posts:Array<IPost>
+    posts:Array<TPost>
 }
 
 const PostList: React.FunctionComponent<IPostListProps> = ({posts}) => (

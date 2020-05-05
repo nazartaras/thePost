@@ -4,6 +4,14 @@ import withRedux from 'next-redux-wrapper';
 import withReduxSaga from 'next-redux-saga';
 import createStore from '../redux/store';
 import App from 'next/app'
+import Header from '../components/Header/Header';
+import { createGlobalStyle } from 'styled-components'
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+  }
+`
 
 interface IMyAppProps extends AppProps {
     store: any;
@@ -11,6 +19,8 @@ interface IMyAppProps extends AppProps {
 const MyApp = ({ Component, pageProps, store }: IMyAppProps) => {
     return (
         <Provider store={store}>
+             <GlobalStyle/>
+            <Header/>
             <Component {...pageProps} />
         </Provider>
     )

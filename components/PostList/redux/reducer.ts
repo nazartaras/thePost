@@ -1,9 +1,9 @@
 import { SAVE_POSTS, SAVE_SELECTED_POST } from './actionTypes';
-import { IPost } from '../IPost';
+import { TPost } from '../../../types/TPost';
 
 export interface IPostInitialState {
-    posts?: Array<IPost>,
-    selectedPost?: IPost
+    posts?: Array<TPost>,
+    selectedPost?: TPost
 }
 
 export const postInitialState: IPostInitialState = {
