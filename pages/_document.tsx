@@ -20,7 +20,6 @@ export default class MyDocument extends Document {
         <Head>
           <title>thePost</title>
           <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-          {this.props.styleTags}
         </Head>
         <body>
           <Main />
