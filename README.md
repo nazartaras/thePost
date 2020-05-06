@@ -23,6 +23,7 @@ Simple prototype of blog.
 - Redux
 - Redux-Saga
 - styled-components
+- tslint and prettier
 
 ## Deployment
 
