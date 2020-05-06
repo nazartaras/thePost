@@ -1,7 +1,11 @@
 import Document, { Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
-export default class MyDocument extends Document {
+interface Props {
+  styleTags: any
+}
+
+export default class MyDocument extends Document<Props> {
   static getInitialProps({ renderPage }) {
     const sheet = new ServerStyleSheet();
 
@@ -19,6 +23,7 @@ export default class MyDocument extends Document {
       <html lang="en">
         <Head>
           <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+          {this.props.styleTags}
         </Head>
         <body>
           <Main />

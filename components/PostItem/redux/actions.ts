@@ -1,4 +1,10 @@
-import { FETCH_POSTS, CREATE_POST, FETCH_POST_BY_ID, CREATE_COMMENT } from './actionTypes';
+import { 
+    FETCH_POSTS, 
+    CREATE_POST, 
+    FETCH_POST_BY_ID, 
+    CREATE_COMMENT,
+    SET_SELECTED_POST_ID,
+} from './actionTypes';
 
 export const fetchPosts = (): {
     type: typeof FETCH_POSTS,
@@ -45,3 +51,15 @@ export const createComment = (postId: string, body: string): {
         payload: { postId, body },
     };
 };
+
+export const setSelectedPostId = (postId: string) : {
+    type: typeof SET_SELECTED_POST_ID,
+    payload: {
+        postId: string
+    },
+} => {
+    return {
+        type: SET_SELECTED_POST_ID,
+        payload: { postId },
+    }
+}

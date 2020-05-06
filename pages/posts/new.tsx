@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
+import Router from 'next/router';
 import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -100,6 +101,7 @@ const PostConstructor: NextPage<IPostConstructorProps> = ({ createPost }) => {
     const handleSubmit = (e): void => {
         if (validateForm(postTitle, postBody)) {
             createPost(postTitle.trim(), postBody.trim());
+            Router.push('/');
         }
     };
     return (
@@ -119,7 +121,6 @@ const PostConstructor: NextPage<IPostConstructorProps> = ({ createPost }) => {
 
 const mapStateToProps = (rootState, props) => ({
     ...props,
-    selectedPost: rootState.postList.selectedPost,
 });
 
 const actions = {

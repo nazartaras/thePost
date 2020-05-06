@@ -3,20 +3,18 @@ import { NextPage } from 'next';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { bindActionCreators } from 'redux';
 import { TPost } from '../types/TPost';
-import { fetchPosts } from '../components/PostItem/redux/actions';
+import { fetchPosts, setSelectedPostId } from '../components/PostItem/redux/actions';
 import Spinner from '../components/Spinner/Spinner';
 import Header from '../components/Header/Header';
 import PostItem from '../components/PostItem/PostItem';
 
 interface IMainProps {
     posts?: TPost[];
+    setSelectedPostId?: (postId: string) => { type: string, payload: { postId: string } };
     isServer: boolean;
 }
-
-export const isClientOrServer = () => {
-    return (typeof window !== 'undefined' && window.document) ? 'client' : 'server';
-};
 
 const StyledPostList = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
@@ -46,8 +44,10 @@ const CreatePost = styled.a`
         background-color: #7467b5;
     }
 `;
-const PostList: NextPage<IMainProps> = ({ posts }) => {
-    const generatePost = posts ? posts.map((el) => <PostItem key={el.id} post={el} />) : null;
+const PostList: NextPage<IMainProps> = ({ posts, setSelectedPostId }) => {
+    const generatePost = posts ? posts.map((el) =>
+        <PostItem onSelect={setSelectedPostId} key={el.id} post={el} />
+    ) : null;
     return generatePost ? (
         <>
             <Header />
@@ -63,7 +63,7 @@ const PostList: NextPage<IMainProps> = ({ posts }) => {
 
 PostList.getInitialProps = async ({ store, req }) => {
     const isServer = !!req;
-    await store.dispatch( fetchPosts() );
+    await store.dispatch(fetchPosts());
     return { isServer };
 };
 
@@ -72,4 +72,10 @@ const mapStateToProps = (rootState, props) => ({
     posts: rootState.postList.posts,
 });
 
-export default connect(mapStateToProps)(PostList);
+const actions = {
+    setSelectedPostId
+};
+
+const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostList);

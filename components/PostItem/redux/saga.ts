@@ -8,12 +8,13 @@ import {
     CREATE_POST,
     CREATE_COMMENT,
     SAVE_COMMENT,
+    SAVE_CREATED_POST,
 } from './actionTypes';
 
 function* getPosts() {
     try {
         const { data } = yield call(axios.get, 'https://simple-blog-api.crew.red/posts');
-        yield put({ type: SAVE_POSTS, payload: data });
+        yield put({ type: SAVE_POSTS, payload: data.reverse() });
 
     } catch (e) {
         console.log('Post saga error' + e.message);
@@ -28,20 +29,19 @@ function* getPostById(action) {
     } catch (e) {
         console.log('Post saga error' + e.message);
     }
-
 }
 
 function* createPost(action) {
     try {
-        yield call(
+        const { data } = yield call(
             axios.post,
             'https://simple-blog-api.crew.red/posts',
             { title: action.payload.title, body: action.payload.body },
         );
+        yield put({ type: SAVE_CREATED_POST, payload: data })
     } catch (e) {
         console.log('Post saga error' + e.message);
     }
-
 }
 
 function* createComment(action) {
@@ -73,7 +73,7 @@ function* watchCreateComment() {
     yield takeEvery(CREATE_COMMENT, createComment);
 }
 
-export default function*() {
+export default function* () {
     yield all([
         watchGetPosts(),
         watchGetPostById(),

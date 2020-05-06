@@ -4,6 +4,7 @@ import { TPost } from '../../types/TPost';
 
 interface IPostItemProps {
     post: TPost;
+    onSelect: (postId: string) => { type: string, payload: { postId: string } };
 }
 
 const StyledPostItem = styled.div`
@@ -68,17 +69,18 @@ const StyledLink = styled.a`
     color: blue;
 `;
 
-const PostItem: React.FunctionComponent<IPostItemProps> = ({ post }) => {
+const PostItem: React.FunctionComponent<IPostItemProps> = ({ post, onSelect }) => {
     return (
-        <StyledPostItem>
-            <PostItemHeader>
-                <UserAvatar alt='creator-image' src='/user.png' />
-                <UserName>Bill Morigan</UserName>
-            </PostItemHeader>
-            <PostItemTitle>{post.title}</PostItemTitle>
-            <PostItemBody>{post.body}</PostItemBody>
-            <Link key={post.id as React.ReactText} href="/posts/[id]" as={`/posts/${post.id}`}><StyledLink>Read more...</StyledLink></Link>
-        </StyledPostItem>
+        <Link key={post.id as React.ReactText} href="/posts/[id]" as={`/posts/${post.id}`}>
+            <StyledPostItem onClick={() => onSelect(post.id)}>
+                <PostItemHeader>
+                    <UserAvatar alt='creator-image' src='/user.png' />
+                    <UserName>Bill Morigan</UserName>
+                </PostItemHeader>
+                <PostItemTitle>{post.title}</PostItemTitle>
+                <PostItemBody>{post.body}</PostItemBody>
+            </StyledPostItem>
+        </Link>
     );
 };
 

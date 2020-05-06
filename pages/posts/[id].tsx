@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import { TPost } from '../../types/TPost';
-import { fetchPostById, createPost } from '../../components/PostItem/redux/actions';
+import { fetchPostById, setSelectedPostId } from '../../components/PostItem/redux/actions';
 import Spinner from '../../components/Spinner/Spinner';
 import CommentList from '../../components/CommentList/CommentList';
 import Header from '../../components/Header/Header';
@@ -12,6 +12,7 @@ import { createComment } from '../../components/PostItem/redux/actions';
 interface IPostPageProps {
     selectedPost?: TPost;
     createComment?: (postId: string, body: string) => { type: string, payload: { postId: string, body: string } };
+    selectedPostId?: string;
     isServer: boolean;
 }
 
@@ -38,8 +39,8 @@ const CommentTitle = styled.h2`
     border-bottom: 1px solid #8c8c8c;
 `;
 
-const PostPage: NextPage<IPostPageProps> = ({ selectedPost, createComment }) => {
-    return selectedPost ? (
+const PostPage: NextPage<IPostPageProps> = ({ selectedPost, createComment, selectedPostId }) => {
+    return selectedPost && selectedPostId === selectedPost.id ? (
         <>
             <Header />
             <StyledPostPage>
@@ -60,6 +61,7 @@ PostPage.getInitialProps = async (ctx) => {
 const mapStateToProps = (rootState, props) => ({
     ...props,
     selectedPost: rootState.postList.selectedPost,
+    selectedPostId: rootState.postList.selectedPostId,
 });
 
 const actions = {
