@@ -1,8 +1,16 @@
 import { takeEvery, all, call, put } from 'redux-saga/effects';
 import axios from 'axios';
-import { FETCH_POSTS, SAVE_POSTS, FETCH_POST_BY_ID, SAVE_SELECTED_POST, CREATE_POST } from './actionTypes';
+import {
+    FETCH_POSTS,
+    SAVE_POSTS,
+    FETCH_POST_BY_ID,
+    SAVE_SELECTED_POST,
+    CREATE_POST,
+    CREATE_COMMENT,
+    SAVE_COMMENT,
+} from './actionTypes';
 
-function* getPosts(action) {
+function* getPosts() {
     try {
         const { data } = yield call(axios.get, 'https://simple-blog-api.crew.red/posts');
         yield put({ type: SAVE_POSTS, payload: data });
@@ -14,7 +22,7 @@ function* getPosts(action) {
 
 function* getPostById(action) {
     try {
-        const { data } = yield call(axios.get, `https://simple-blog-api.crew.red/posts/${action.payload}?_embed=comments`);
+        const { data } = yield call(axios.get, `https://simple-blog-api.crew.red/posts/${action.payload.id}?_embed=comments`);
         yield put({ type: SAVE_SELECTED_POST, payload: data });
 
     } catch (e) {
@@ -25,17 +33,28 @@ function* getPostById(action) {
 
 function* createPost(action) {
     try {
-        console.log('hi');
-        const { data } = yield call(
+        yield call(
             axios.post,
             'https://simple-blog-api.crew.red/posts',
             { title: action.payload.title, body: action.payload.body },
         );
-        console.log(data);
     } catch (e) {
         console.log('Post saga error' + e.message);
     }
 
+}
+
+function* createComment(action) {
+    try {
+        const { data } = yield call(
+            axios.post,
+            'https://simple-blog-api.crew.red/comments',
+            { postId: action.payload.postId, body: action.payload.body },
+        );
+        yield put({ type: SAVE_COMMENT, payload: data });
+    } catch (e) {
+        console.log('Post saga error' + e.message);
+    }
 }
 
 function* watchGetPosts() {
@@ -50,10 +69,15 @@ function* watchCreatePost() {
     yield takeEvery(CREATE_POST, createPost);
 }
 
+function* watchCreateComment() {
+    yield takeEvery(CREATE_COMMENT, createComment);
+}
+
 export default function*() {
     yield all([
         watchGetPosts(),
         watchGetPostById(),
         watchCreatePost(),
+        watchCreateComment(),
     ]);
 }

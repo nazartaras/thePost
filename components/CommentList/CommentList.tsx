@@ -1,13 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { TComment } from '../../types/TComment';
+import AddComment from '../AddComment/AddComment';
 
 interface ICommentListProps {
-    comments: TComment[];
+    comments?: TComment[];
+    onCommentShare: (postId: string, body: string) => { type: string, payload: { postId: string, body: string } };
+    id: string;
 }
 
 const StyledCommentList = styled.ul`
     list-style-type: none;
+    padding-left:5px;
 `;
 
 const CommentItem = styled.li`
@@ -36,7 +40,7 @@ const CommentItem = styled.li`
     }
 `;
 
-const CommentList: React.FunctionComponent<ICommentListProps> = ({ comments }) => {
+const CommentList: React.FunctionComponent<ICommentListProps> = ({ comments, onCommentShare, id }) => {
     const generateComments = comments.map((el) => (
         <CommentItem key={el.id as React.ReactText}>
             {el.body}
@@ -45,6 +49,7 @@ const CommentList: React.FunctionComponent<ICommentListProps> = ({ comments }) =
     );
     return (
         <StyledCommentList>
+            <AddComment postId={id} share={onCommentShare} />
             {generateComments}
         </StyledCommentList>
     );

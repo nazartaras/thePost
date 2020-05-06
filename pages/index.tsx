@@ -1,10 +1,10 @@
 import React from 'react';
-import { NextPage, NextPageContext } from 'next';
+import { NextPage } from 'next';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { TPost } from '../types/TPost';
-import { FETCH_POSTS } from '../components/PostList/redux/actionTypes';
+import { fetchPosts } from '../components/PostItem/redux/actions';
 import Spinner from '../components/Spinner/Spinner';
 import Header from '../components/Header/Header';
 import PostItem from '../components/PostItem/PostItem';
@@ -47,8 +47,8 @@ const CreatePost = styled.a`
     }
 `;
 const PostList: NextPage<IMainProps> = ({ posts }) => {
-    const generatePost = posts.map((el) => <PostItem key={el.id} post={el} />);
-    return posts ? (
+    const generatePost = posts ? posts.map((el) => <PostItem key={el.id} post={el} />) : null;
+    return generatePost ? (
         <>
             <Header />
             <StyledPostList>
@@ -63,7 +63,7 @@ const PostList: NextPage<IMainProps> = ({ posts }) => {
 
 PostList.getInitialProps = async ({ store, req }) => {
     const isServer = !!req;
-    await store.dispatch({ type: FETCH_POSTS });
+    await store.dispatch( fetchPosts() );
     return { isServer };
 };
 

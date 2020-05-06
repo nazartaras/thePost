@@ -18,7 +18,6 @@ export default class MyDocument extends Document {
     return (
       <html lang="en">
         <Head>
-          <title>thePost</title>
           <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         </Head>
         <body>

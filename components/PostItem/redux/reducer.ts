@@ -1,4 +1,4 @@
-import { SAVE_POSTS, SAVE_SELECTED_POST } from './actionTypes';
+import { SAVE_POSTS, SAVE_SELECTED_POST, SAVE_COMMENT } from './actionTypes';
 import { TPost } from '../../../types/TPost';
 
 export interface IPostInitialState {
@@ -23,6 +23,15 @@ export default function(state = postInitialState, action) {
             return {
                 ...state,
                 selectedPost: action.payload,
+            };
+        }
+        case SAVE_COMMENT: {
+            return {
+                ...state,
+                selectedPost : {
+                    ...state.selectedPost,
+                    comments: [action.payload].concat(state.selectedPost.comments),
+                },
             };
         }
         default: {

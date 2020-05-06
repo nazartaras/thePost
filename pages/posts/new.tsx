@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { createPost } from '../../components/PostList/redux/actions';
+import { createPost } from '../../components/PostItem/redux/actions';
 import Header from '../../components/Header/Header';
 
 interface IPostConstructorProps {
@@ -24,7 +24,7 @@ const StyledForm = styled.form`
 
 const TitleInput = styled.input`
     border: none;
-    border-bottom: 2px solid #D9F0FF;
+    border-bottom: 2px solid ${(props) => props.theme.inputColor};;
     margin-bottom: 10px;
     margin-top:50px;
     padding 15px;
@@ -33,12 +33,12 @@ const TitleInput = styled.input`
     font-size: 20px;
 
     &:focus{
-        border-bottom: 4px solid #A3D5FF;
+        border-bottom: 4px solid ${(props) => props.theme.inputFocusedColor};;
     }
 `;
 
 const BodyTextarea = styled.textarea`
-    border: 2px solid #D9F0FF;
+    border: 2px solid ${(props) => props.theme.inputColor};;
     outline: none;
     min-height: 150px;
     font-size: 16px;
@@ -47,7 +47,7 @@ const BodyTextarea = styled.textarea`
     margin-bottom: 20px;
 
     &:focus{
-        border: 4px solid #A3D5FF;
+        border: 4px solid ${(props) => props.theme.inputFocusedColor};;
     }
 `;
 
@@ -55,7 +55,7 @@ const CreateButton = styled.button`
     padding: 10px;
     width: 100px;
     border-radius: 10px;
-    background-color: #9785f2;
+    background-color: ${(props) => props.theme.buttonColor};;
     color: white;
     font-size: 18px;
     align-self: center;
@@ -65,7 +65,7 @@ const CreateButton = styled.button`
 
     &:hover{
         cursor: pointer;
-        background-color: #7467b5;
+        background-color: ${(props) => props.theme.buttonHoverColor};;
     }
 `;
 
@@ -75,25 +75,21 @@ const ErrorMessage = styled.p`
     color: red;
 `;
 
-export const isClientOrServer = () => {
-    return (typeof window !== 'undefined' && window.document) ? 'client' : 'server';
-};
-
 const PostConstructor: NextPage<IPostConstructorProps> = ({ createPost }) => {
     const [postTitle, changePostTitle] = useState('');
     const [postBody, changePostBody] = useState('');
     const [error, setError] = useState('');
 
-    const handleTitleChange = ({ target }) => {
+    const handleTitleChange = ({ target }): void => {
         setError('');
         changePostTitle(target.value);
     };
 
-    const handleBodyChange = ({ target }) => {
+    const handleBodyChange = ({ target }): void => {
         setError('');
         changePostBody(target.value);
     };
-    const validateForm = (title, body) => {
+    const validateForm = (title, body): boolean => {
         if (title.trim() === '' || body.trim() === '') {
             setError('All fields should be filled!!!');
             return false;
@@ -101,12 +97,11 @@ const PostConstructor: NextPage<IPostConstructorProps> = ({ createPost }) => {
         return true;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e): void => {
         if (validateForm(postTitle, postBody)) {
             createPost(postTitle.trim(), postBody.trim());
         }
     };
-    console.log(isClientOrServer());
     return (
         <>
             <Header />

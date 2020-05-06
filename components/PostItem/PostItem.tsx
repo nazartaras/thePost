@@ -6,13 +6,14 @@ interface IPostItemProps {
     post: TPost;
 }
 
-const StyledPostItem = styled.a`
+const StyledPostItem = styled.div`
 margin-bottom: 10px;
 padding: 10px;
 border-radius: 3px;
-box-shadow: 0 0 5px #8c8c8c;
+box-shadow: 0 0 5px ${(props) => props.theme.textSecondaryColor};
 transition: all .2s ease-in-out;
-
+display: flex;
+flex-direction: column;
 &:hover{
     transform: scale(1.01);
     cursor: pointer;
@@ -22,13 +23,14 @@ transition: all .2s ease-in-out;
 const PostItemTitle = styled.h3`
 text-align:center;
 `;
+
 const PostItemBody = styled.p`
 position:relative;
 line-height: 16px;
 max-height: calc(3 * 16px);
 overflow: hidden;
 padding-right: 8px;
-color: #8c8c8c;
+color: ${(props) => props.theme.textSecondaryColor};
 
 &:after{
     content: "";
@@ -45,7 +47,7 @@ color: #8c8c8c;
 const PostItemHeader = styled.div`
 height:30px;
 padding: 5px;
-border-bottom: 1px solid #8c8c8c;
+border-bottom: 1px solid ${(props) => props.theme.textSecondaryColor};
 display: flex;
 align-items:center;
 `;
@@ -60,18 +62,23 @@ margin-right: 10px;
 const UserName = styled.span`
 `;
 
-const PostItem: React.FunctionComponent<IPostItemProps> = ({post}) => {
+const StyledLink = styled.a`
+    text-align: right;
+    text-decoration: underline;
+    color: blue;
+`;
+
+const PostItem: React.FunctionComponent<IPostItemProps> = ({ post }) => {
     return (
-        <Link key={post.id as React.ReactText} href="/posts/[id]" as={`/posts/${post.id}`}>
-            <StyledPostItem>
-                <PostItemHeader>
-                    <UserAvatar alt='creator-image' src='/user.png' />
-                    <UserName>Bill Morigan</UserName>
-                </PostItemHeader>
-                <PostItemTitle>{post.title}</PostItemTitle>
-                <PostItemBody>{post.body}</PostItemBody>
-            </StyledPostItem>
-        </Link>
+        <StyledPostItem>
+            <PostItemHeader>
+                <UserAvatar alt='creator-image' src='/user.png' />
+                <UserName>Bill Morigan</UserName>
+            </PostItemHeader>
+            <PostItemTitle>{post.title}</PostItemTitle>
+            <PostItemBody>{post.body}</PostItemBody>
+            <Link key={post.id as React.ReactText} href="/posts/[id]" as={`/posts/${post.id}`}><StyledLink>Read more...</StyledLink></Link>
+        </StyledPostItem>
     );
 };
 

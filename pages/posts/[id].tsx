@@ -1,17 +1,17 @@
 import { NextPage } from 'next';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import { TPost } from '../../types/TPost';
-import { FETCH_POST_BY_ID } from '../../components/PostList/redux/actionTypes';
+import { fetchPostById, createPost } from '../../components/PostItem/redux/actions';
 import Spinner from '../../components/Spinner/Spinner';
 import CommentList from '../../components/CommentList/CommentList';
 import Header from '../../components/Header/Header';
+import { createComment } from '../../components/PostItem/redux/actions';
 
-export const isClientOrServer = () => {
-    return (typeof window !== 'undefined' && window.document) ? 'client' : 'server';
-};
 interface IPostPageProps {
     selectedPost?: TPost;
+    createComment?: (postId: string, body: string) => { type: string, payload: { postId: string, body: string } };
     isServer: boolean;
 }
 
@@ -38,9 +38,7 @@ const CommentTitle = styled.h2`
     border-bottom: 1px solid #8c8c8c;
 `;
 
-const PostPage: NextPage<IPostPageProps> = ({ selectedPost, isServer }) => {
-    console.log('id');
-    console.log(isClientOrServer());
+const PostPage: NextPage<IPostPageProps> = ({ selectedPost, createComment }) => {
     return selectedPost ? (
         <>
             <Header />
@@ -48,14 +46,14 @@ const PostPage: NextPage<IPostPageProps> = ({ selectedPost, isServer }) => {
                 <PostTitle>{selectedPost.title}</PostTitle>
                 <PostBody>{selectedPost.body}</PostBody>
                 <CommentTitle>Comments</CommentTitle>
-                <CommentList comments={selectedPost.comments} />
+                <CommentList id={selectedPost.id} onCommentShare={createComment} comments={selectedPost.comments} />
             </StyledPostPage>
         </>
     ) : <Spinner />;
 };
 
 PostPage.getInitialProps = async (ctx) => {
-    await ctx.store.dispatch({ type: FETCH_POST_BY_ID, payload: ctx.query.id });
+    await ctx.store.dispatch(fetchPostById(ctx.query.id as string));
     return { isServer: ctx.isServer };
 };
 
@@ -64,4 +62,10 @@ const mapStateToProps = (rootState, props) => ({
     selectedPost: rootState.postList.selectedPost,
 });
 
-export default connect(mapStateToProps)(PostPage);
+const actions = {
+    createComment,
+};
+
+const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostPage);
