@@ -1,5 +1,5 @@
 {
-	"extends": ["tslint:recommended", "tslint-react"],
+	"extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
 	"rules": {
 		"max-line-length": [true, 140],
 		"ordered-imports": false,

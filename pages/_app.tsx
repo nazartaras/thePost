@@ -14,33 +14,33 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const theme = {
-    buttonColor: '#9785f2',
-    buttonHoverColor:  '#7467b5',
-    inputColor: '#d9f0ff',
-    inputFocusedColor: '#a3d5ff',
-    textSecondaryColor: '#8c8c8c',
+	buttonColor: '#9785f2',
+	buttonHoverColor: '#7467b5',
+	inputColor: '#d9f0ff',
+	inputFocusedColor: '#a3d5ff',
+	textSecondaryColor: '#8c8c8c'
 };
 
 interface IMyAppProps extends AppProps {
-    store: any;
+	store: any;
 }
 const MyApp = ({ Component, pageProps, store }: IMyAppProps) => {
-    return (
-        <Provider store={store}>
-            <Head>
-                <title>thePost</title>
-            </Head>
-            <GlobalStyle/>
-            <ThemeProvider theme={theme} >
-                <Component {...pageProps} />
-            </ThemeProvider>
-        </Provider>
-    );
+	return (
+		<Provider store={store}>
+			<Head>
+				<title>thePost</title>
+			</Head>
+			<GlobalStyle />
+			<ThemeProvider theme={theme}>
+				<Component {...pageProps} />
+			</ThemeProvider>
+		</Provider>
+	);
 };
 
-MyApp.getInitialProps = async (appContext) => {
-    const pageProps = await App.getInitialProps(appContext);
-    return { ...pageProps };
+MyApp.getInitialProps = async appContext => {
+	const pageProps = await App.getInitialProps(appContext);
+	return { ...pageProps };
 };
 
 export default withRedux(createStore)(withReduxSaga(MyApp));
